@@ -4,6 +4,11 @@
     box-sizing: border-box;
 }
 
+:root{
+    --color-accent: #008080;
+    --color-red: #cf0c0c;
+}
+
 /* ==================== MAIN LAYOUT ==================== */
 
 body{
@@ -25,9 +30,8 @@ header{
     position: sticky;
     top: 0;
     z-index: 2;
-    
-    background-color: black;
-    color: white;
+
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.08);
 }
 
 header .logo{
@@ -46,9 +50,38 @@ header .logo{
 }
 
 
+/* Tool */
+
+.tool{
+    background-color: var(--color-accent);
+    color: white;
+    border: 0;
+    border-radius: 8px;
+    
+    padding: 8px;
+
+    vertical-align: center;
+
+    transition: all 0.1s;
+}
+
+.tool:hover{
+    outline: 2px solid var(--color-accent);
+    background-color: white;
+    color: var(--color-accent);
+}
+
+.tool > svg{
+    pointer-events: none;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+
 main{
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
     gap: 16px;
 }
 
@@ -58,6 +91,8 @@ footer{
     display: flex;
     justify-content: center;
     align-items: center;
+
+    border-top: 1px solid rgba(0, 0, 0, 0.25);
 }
 
 header, main, footer{
@@ -74,20 +109,19 @@ header, main, footer{
     flex-direction: column;
     gap: 8px;
 
-    border: 1px solid black;
     border-radius: 16px;
+    
+    border: 1px solid black;
 
     padding: 16px;
 }
 
 .card > .thumbnail{
     align-self: center;
-    width: min(100%, 250px);
-    height: min(100%, 250px);
-    
+    height: 300px;
     padding-bottom: 16px;
 
-    border-bottom: 1px solid lightgray;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
 }
 
 .thumbnail img{
@@ -96,8 +130,8 @@ header, main, footer{
     object-fit: contain;
 }
 
-.card > .title{
-    
+.card > .author{
+    color: grey;
 }
 
 .tag-container{
@@ -109,10 +143,13 @@ header, main, footer{
 }
 
 .tag{
+    font-size: 0.75rem;
+
     border: 0;
     border-radius: 8px;
     padding: 8px;
-    background-color: lightgray;
+    background-color: grey;
+    color: lightgrey;
     text-align: center;
 
     max-width: 15ch;
@@ -121,17 +158,24 @@ header, main, footer{
     overflow: hidden;
 }
 
+.card button:hover{
+    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.25);
+    
+}
+
 .card button, .card a{
     padding: 8px;
-    border: 1px solid black;
+    border: 1px solid grey;
     border-radius: 8px;
 
     text-decoration: none;
     text-align: center;
-    background-color: lightgrey;
 }
 
 .card .status{
+    font-size: 1.1rem;
+    font-weight: 600;
+
     display: flex;
     align-items: center;
     justify-content: center;
@@ -140,7 +184,11 @@ header, main, footer{
     color: inherit;
 }
 
+.card[data-have-read="true"] .status{
+    background-color: var(--color-accent);
+}
 .card[data-have-read="true"] .status::after{
+    color: white;
     content: "Read";
 }
 
@@ -149,7 +197,7 @@ header, main, footer{
 }
 
 .card .delete{
-    color: black;
+    color: grey;
 }
 
 .card .delete svg{
@@ -157,6 +205,10 @@ header, main, footer{
     height: 100%;
 
     pointer-events: none;
+}
+
+.card .delete:hover{
+    color: var(--color-red);
 }
 
 .card .tool-bar{
@@ -203,10 +255,32 @@ header, main, footer{
     grid-column: 1 / -1;
     padding: 16px;
     border-radius:8px;
+
+    border: 1px solid grey;
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+form button[type="submit"]{
+    background-color: var(--color-accent);
+    color: white;
+    border: 0;    
+}
+
+form button[type="submit"]:hover{
+    background-color: white;
+    color: var(--color-accent);
+    outline: 2px solid var(--color-accent);    
 }
 
 #close-entry{
-    
+    color: black;
+    border: 0;
+}
+
+#close-entry:hover{
+    background-color: white;
+    outline: 2px solid black;
 }
 
 
@@ -220,7 +294,7 @@ textarea{
 
 input[type="text"]:invalid,
 input[type="url"]:invalid{
-    border: 1px solid red;
+    border: 1px solid var(--color-red);
 }
 
 
@@ -228,5 +302,4 @@ textarea{
     height: 400px;
     resize: none;
 }
-
 
