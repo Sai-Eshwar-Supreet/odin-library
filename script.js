@@ -1,6 +1,6 @@
 'use strict';
 
-const myLibrary = {};
+const myLibrary = [];
 const bookShelf = document.querySelector('#book-shelf');
 
 function Book(title, author, imgSrc, tags, haveRead){
@@ -28,18 +28,20 @@ function addBookToLibrary(title, author, imgSrc, tags, haveRead){
     book.cardUI = createCard(book);
     if(book.cardUI) bookShelf.prepend(book.cardUI);
 
-    myLibrary[book.id] = book;
+
+    myLibrary.push(book);
 };
 
 function removeBookFromLibrary(bookId){
     if(!bookId) return;
-    const book = myLibrary[bookId];
+    const book = myLibrary.find(el => (el.id === bookId));
 
     if(!book) return;
 
     if(book.cardUI) book.cardUI.remove();
 
-    delete myLibrary[bookId];
+    const index = myLibrary.findIndex(el => (el.id === bookId));
+    if(index !== -1) myLibrary.splice(index, 1);
 }
 
 function createDiv(...classList){
@@ -168,14 +170,18 @@ function createCard(book){
     
     card.addEventListener('click', (event) => {
         const bookID = event.currentTarget.dataset.bookId;
+        const book = myLibrary.find(el => (el.id === bookID));
+
+        if(!book) return;
+
         switch(event.target.dataset.action){
             case "delete":
-                if(confirm(`Are you sure you want to delete "${myLibrary[bookID].title}"`)){
+                if(confirm(`Are you sure you want to delete "${book.title}"`)){
                     removeBookFromLibrary(bookID);
                 }
                 break;
             case "status change":
-                myLibrary[bookID].toggleStatus();
+                book.toggleStatus();
                 break;
         }
     });
