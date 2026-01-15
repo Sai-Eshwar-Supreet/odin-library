@@ -1,0 +1,232 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* ==================== MAIN LAYOUT ==================== */
+
+body{
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+
+    background-color: white;
+    color: black;
+}
+
+header{
+    display: flex;
+    flex-flow: row wrap;
+    min-height: 50px;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    
+    background-color: black;
+    color: white;
+}
+
+header .logo{
+    flex: 1;
+    min-width: min(100%, 250px);
+}
+
+.tool-bar{
+    min-width: 200px;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-end;
+    align-items: stretch;
+    flex: 2;
+    gap: 16px;
+}
+
+
+main{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px;
+}
+
+footer{
+    margin-top: auto;
+    min-height: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+header, main, footer{
+    padding: 16px;
+}
+
+/* ==================== CONTENT ==================== */
+
+
+/* Card */
+
+.card{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    border: 1px solid black;
+    border-radius: 16px;
+
+    padding: 16px;
+}
+
+.card > .thumbnail{
+    align-self: center;
+    width: min(100%, 250px);
+    height: min(100%, 250px);
+    
+    padding-bottom: 16px;
+
+    border-bottom: 1px solid lightgray;
+}
+
+.thumbnail img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.card > .title{
+    
+}
+
+.tag-container{
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.tag{
+    border: 0;
+    border-radius: 8px;
+    padding: 8px;
+    background-color: lightgray;
+    text-align: center;
+
+    max-width: 15ch;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.card button, .card a{
+    padding: 8px;
+    border: 1px solid black;
+    border-radius: 8px;
+
+    text-decoration: none;
+    text-align: center;
+    background-color: lightgrey;
+}
+
+.card .status{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 4;
+
+    color: inherit;
+}
+
+.card[data-have-read="true"] .status::after{
+    content: "Read";
+}
+
+.card[data-have-read="false"] .status::after{
+    content: "Unread";
+}
+
+.card .delete{
+    color: black;
+}
+
+.card .delete svg{
+    width: 100%;
+    height: 100%;
+
+    pointer-events: none;
+}
+
+.card .tool-bar{
+    margin-top: auto;
+    min-height: 50px;
+    max-height: 50px;
+}
+
+/* Form entry modal */
+
+#entry-modal{
+    position: relative;
+
+    min-width: min(100%, 500px);
+    min-height: min(100%, 500px);
+    overflow-x: hidden;
+    overflow-y: auto;
+
+    margin: auto;
+
+    padding: 16px;
+
+    border-radius: 16px;
+}
+
+#entry-modal form{
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 16px;
+
+    place-content: center;
+    align-items: baseline;
+    
+}
+#entry-modal form > legend{
+    grid-column: 1 / -1;
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+#entry-modal form > button{
+    grid-column: 1 / -1;
+    padding: 16px;
+    border-radius:8px;
+}
+
+#close-entry{
+    
+}
+
+
+input[type="text"],
+input[type="url"],
+textarea{
+    padding: 16px;
+    border-radius: 8px;
+    border: 1px solid lightgray;
+}
+
+input[type="text"]:invalid,
+input[type="url"]:invalid{
+    border: 1px solid red;
+}
+
+
+textarea{
+    height: 400px;
+    resize: none;
+}
+
+
