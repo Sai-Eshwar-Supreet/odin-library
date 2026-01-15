@@ -5,8 +5,21 @@
 }
 
 :root{
-    --color-accent: #008080;
-    --color-red: #cf0c0c;
+    /* Neutrals*/
+    --color-n-100: #e2d1de;
+    --color-n-300: #c7b1c2;
+    --color-n-500: #694460;
+    --color-n-700: #421b38;
+    --color-n-900: #2e0925;
+
+    /* Accent*/
+    --color-a-100: #eddee9;
+    --color-a-500: #80005a;
+    --color-a-900: #500138;
+    
+    /* States */
+    --danger: #d41515;
+    --success: #1a8000;
 }
 
 /* ==================== MAIN LAYOUT ==================== */
@@ -16,8 +29,8 @@ body{
     flex-direction: column;
     min-height: 100vh;
 
-    background-color: white;
-    color: black;
+    background-color: var(--color-n-300);
+    color: var(--color-n-900);
 }
 
 header{
@@ -31,7 +44,8 @@ header{
     top: 0;
     z-index: 2;
 
-    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.08);
+    background-color: var(--color-n-100);
+    border-top: 1px solid var(--color-n-500);
 }
 
 header .logo{
@@ -53,11 +67,11 @@ header .logo{
 /* Tool */
 
 .tool{
-    background-color: var(--color-accent);
-    color: white;
+    background-color: var(--color-a-500);
+    color: var(--color-n-100);
+
     border: 0;
     border-radius: 8px;
-    
     padding: 8px;
 
     vertical-align: center;
@@ -66,9 +80,9 @@ header .logo{
 }
 
 .tool:hover{
-    outline: 2px solid var(--color-accent);
-    background-color: white;
-    color: var(--color-accent);
+    outline: 2px solid var(--color-a-500);
+    background-color: var(--color-n-100);
+    color: var(--color-a-500);
 }
 
 .tool > svg{
@@ -81,8 +95,8 @@ header .logo{
 
 main{
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 32px;
 }
 
 footer{
@@ -92,7 +106,7 @@ footer{
     justify-content: center;
     align-items: center;
 
-    border-top: 1px solid rgba(0, 0, 0, 0.25);
+    border-top: 1px solid var(--color-n-500);
 }
 
 header, main, footer{
@@ -105,15 +119,20 @@ header, main, footer{
 /* Card */
 
 .card{
+    background-color: var(--color-n-100);
+
     display: flex;
     flex-direction: column;
     gap: 8px;
 
     border-radius: 16px;
-    
-    border: 1px solid black;
+    padding: 32px;
 
-    padding: 16px;
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.08);
+}
+
+.card:hover{
+    outline: 2px solid var(--color-n-500);
 }
 
 .card > .thumbnail{
@@ -121,7 +140,7 @@ header, main, footer{
     height: 300px;
     padding-bottom: 16px;
 
-    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    border-bottom: 1px solid var(--color-n-500);
 }
 
 .thumbnail img{
@@ -131,7 +150,7 @@ header, main, footer{
 }
 
 .card > .author{
-    color: grey;
+    color: var(--color-n-700);
 }
 
 .tag-container{
@@ -145,11 +164,11 @@ header, main, footer{
 .tag{
     font-size: 0.75rem;
 
-    border: 0;
+    border: 1px solid var(--color-n-500);
     border-radius: 8px;
     padding: 8px;
-    background-color: grey;
-    color: lightgrey;
+    background-color: var(--color-a-100);
+    color: var(--color-n-700);
     text-align: center;
 
     max-width: 15ch;
@@ -160,12 +179,11 @@ header, main, footer{
 
 .card button:hover{
     box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.25);
-    
 }
 
 .card button, .card a{
     padding: 8px;
-    border: 1px solid grey;
+    border: 1px solid var(--color-n-500);
     border-radius: 8px;
 
     text-decoration: none;
@@ -185,10 +203,10 @@ header, main, footer{
 }
 
 .card[data-have-read="true"] .status{
-    background-color: var(--color-accent);
+    background-color: var(--success);
 }
 .card[data-have-read="true"] .status::after{
-    color: white;
+    color: #faf5f9;
     content: "Read";
 }
 
@@ -208,7 +226,7 @@ header, main, footer{
 }
 
 .card .delete:hover{
-    color: var(--color-red);
+    color: var(--danger);
 }
 
 .card .tool-bar{
@@ -217,21 +235,29 @@ header, main, footer{
     max-height: 50px;
 }
 
-/* Form entry modal */
+/* ===================== FORM MODAL ===================== */
 
 #entry-modal{
-    position: relative;
+    position: fixed;
 
-    min-width: min(100%, 500px);
-    min-height: min(100%, 500px);
+    min-width: min(90%, 700px);
+    min-height: min(90%, 500px);
     overflow-x: hidden;
     overflow-y: auto;
 
     margin: auto;
 
-    padding: 16px;
+    padding: 32px;
 
+    border: 2px solid var(--color-n-500);
     border-radius: 16px;
+
+    background-color: var(--color-n-100);
+    color: var(--color-n-900);
+}
+
+#entry-modal::backdrop{
+    background: radial-gradient(ellipse,rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 100%);
 }
 
 #entry-modal form{
@@ -249,52 +275,45 @@ header, main, footer{
     grid-column: 1 / -1;
     text-align: center;
     font-size: 1.2rem;
+    padding-bottom: 16px;
+
+    border-bottom: var(--color-n-500);
 }
 
 #entry-modal form > button{
-    grid-column: 1 / -1;
     padding: 16px;
     border-radius:8px;
 
-    border: 1px solid grey;
+    border: 1px solid var(--color-n-500);
     font-size: 1.1rem;
     font-weight: 700;
 }
 
 form button[type="submit"]{
-    background-color: var(--color-accent);
-    color: white;
-    border: 0;    
+    background-color: var(--color-a-500);
+    color: var(--color-a-100);
 }
 
-form button[type="submit"]:hover{
-    background-color: white;
-    color: var(--color-accent);
-    outline: 2px solid var(--color-accent);    
+form button:hover{
+    box-shadow: 0 10px 10px 0 rgba(0, 0, 0, 0.25);
 }
 
 #close-entry{
-    color: black;
-    border: 0;
+    color: var(--color-n-900);
 }
-
-#close-entry:hover{
-    background-color: white;
-    outline: 2px solid black;
-}
-
 
 input[type="text"],
 input[type="url"],
 textarea{
+    outline-color: var(--color-n-500);
     padding: 16px;
     border-radius: 8px;
-    border: 1px solid lightgray;
+    border: 1px solid var(--color-n-500);
 }
 
 input[type="text"]:invalid,
 input[type="url"]:invalid{
-    border: 1px solid var(--color-red);
+    border: 2px solid var(--danger);
 }
 
 
