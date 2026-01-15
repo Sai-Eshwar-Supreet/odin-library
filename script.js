@@ -1,7 +1,6 @@
 'use strict';
 
 const myLibrary = [];
-const cardUIs = {};
 const bookShelf = document.querySelector('#book-shelf');
 
 function Book(title, author, imgSrc, tags, haveRead){
@@ -18,16 +17,11 @@ function Book(title, author, imgSrc, tags, haveRead){
 
 Book.prototype.toggleStatus = function(){
     this.haveRead = !this.haveRead;
-    if(this.cardUI){
-        this.cardUI.dataset.haveRead = this.haveRead;
-    }
 }
 
 function addBookToLibrary(title, author, imgSrc, tags, haveRead){
     const book = new Book(title, author, imgSrc, tags, haveRead);
     myLibrary.push(book);
-
-    return book;
 };
 
 function removeBookFromLibrary(bookId){
@@ -159,34 +153,39 @@ function createCard(book){
     card.appendChild(toolBar);
 
     
-    card.addEventListener('click', (event) => {
-        const bookID = event.currentTarget.dataset.bookId;
-        const book = myLibrary.find(el => (el.id === bookID));
-
-        if(!book) return;
-
-        switch(event.target.dataset.action){
-            case "delete":
-                if(confirm(`Are you sure you want to delete "${book.title}"`)){
-                    removeBookFromLibrary(bookID);
-                    event.currentTarget.remove();
-                }
-                break;
-            case "status change":
-                book.toggleStatus();
-                event.currentTarget.dataset.haveRead = book.haveRead;
-                break;
-        }
-    });
+    card.addEventListener('click', onCardUpdate);
 
     return card;
 }
 
-function addCardUI(book){
-    const cardUI = createCard(book);
-    if(cardUI) bookShelf.prepend(cardUI);
+function onCardUpdate(event) {
+    const bookID = event.currentTarget.dataset.bookId;
+    const book = myLibrary.find(el => (el.id === bookID));
+
+    if (!book) return;
+
+    switch (event.target.dataset.action) {
+        case "delete":
+            if (confirm(`Are you sure you want to delete "${book.title}"`)) {
+                removeBookFromLibrary(bookID);
+                renderLibrary();
+            }
+            break;
+        case "status change":
+            book.toggleStatus();
+            renderLibrary();
+            break;
+    }
 }
 
+function renderLibrary(){
+    bookShelf.innerHTML = '';
+
+    for(let book of myLibrary){
+        const cardUI = createCard(book);
+        if(cardUI) bookShelf.prepend(cardUI);
+    }
+}
 
 
 const addBookForm = document.querySelector('#add-book');
@@ -208,8 +207,9 @@ function submitForm(event){
 
     closeModal();
     
-    const book = addBookToLibrary(title, author, imgSrc, tags, false);
-    addCardUI(book);
+    addBookToLibrary(title, author, imgSrc, tags, false);
+    
+    renderLibrary();
 }
 
 function closeModal() {
@@ -227,14 +227,10 @@ addBookForm.addEventListener('submit', submitForm)
 
 // Default
 
-let defaultBooks = [
-    addBookToLibrary("DSA Made Easy", "Narasimha Karumanchi", "https://m.media-amazon.com/images/I/714+tgyHDRL._SY385_.jpg", ["DSA", "Algorithms", "Data structures", "Programming"], true),
-    addBookToLibrary("Atomic Habits", "James Clear", "https://m.media-amazon.com/images/I/51b4CfdTSDL._SY445_SX342_FMwebp_.jpg", ["Habits", "Self-help"], false),
-    addBookToLibrary("So Good They Can't Ignore You", "Cal Newport", "https://m.media-amazon.com/images/I/71KLTWMGdrL._SY466_.jpg", ["Work", "Self-help", "Value", "Career"], false)
-];
 
-// default render
+addBookToLibrary("DSA Made Easy", "Narasimha Karumanchi", "https://m.media-amazon.com/images/I/714+tgyHDRL._SY385_.jpg", ["DSA", "Algorithms", "Data structures", "Programming"], false);
+addBookToLibrary("Atomic Habits", "James Clear", "https://m.media-amazon.com/images/I/51b4CfdTSDL._SY445_SX342_FMwebp_.jpg", ["Habits", "Self-help"], false);
+addBookToLibrary("So Good They Can't Ignore You", "Cal Newport", "https://m.media-amazon.com/images/I/71KLTWMGdrL._SY466_.jpg", ["Work", "Self-help", "Value", "Career"], false);
 
-for(let book of defaultBooks){
-    addCardUI(book);
-}
+
+renderLibrary();
