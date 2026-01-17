@@ -3,20 +3,19 @@
 const myLibrary = [];
 const bookShelf = document.querySelector('#book-shelf');
 
-function Book(title, author, imgSrc, tags, haveRead){
-    if(!new.target) {
-        throw Error("Must use new operator to call the function")
+class Book{
+    constructor(title, author, imgSrc, tags, haveRead){
+        this.id = crypto.randomUUID();
+        this.title = title;
+        this.author = author;
+        this.imgSrc = imgSrc;
+        this.tags = tags;
+        this.haveRead = haveRead;
     }
-    this.id = crypto.randomUUID();
-    this.title = title;
-    this.author = author;
-    this.imgSrc = imgSrc;
-    this.tags = tags;
-    this.haveRead = haveRead;
-};
 
-Book.prototype.toggleStatus = function(){
-    this.haveRead = !this.haveRead;
+    toggleStatus(){
+        this.haveRead = !this.haveRead;
+    }
 }
 
 function addBookToLibrary(title, author, imgSrc, tags, haveRead){
