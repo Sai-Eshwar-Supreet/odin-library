@@ -1,6 +1,4 @@
 'use strict';
-
-const myLibrary = [];
 const bookShelf = document.querySelector('#book-shelf');
 
 class Book{
@@ -12,23 +10,34 @@ class Book{
         this.tags = tags;
         this.haveRead = haveRead;
     }
-
+    
     toggleStatus(){
         this.haveRead = !this.haveRead;
     }
 }
 
-function addBookToLibrary(title, author, imgSrc, tags, haveRead){
-    const book = new Book(title, author, imgSrc, tags, haveRead);
-    myLibrary.push(book);
-};
+const library = (
+    function(){
+        const books = [];
+        function addBookToLibrary(title, author, imgSrc, tags, haveRead){
+            const book = new Book(title, author, imgSrc, tags, haveRead);
+            books.push(book);
+        };
 
-function removeBookFromLibrary(bookId){
-    if(!bookId) return;
+        function removeBookFromLibrary(bookId){
+            if(!bookId) return;
 
-    const index = myLibrary.findIndex(el => (el.id === bookId));
-    if(index !== -1) myLibrary.splice(index, 1);
-}
+            const index = books.findIndex(el => (el.id === bookId));
+            if(index !== -1) books.splice(index, 1);
+        }
+        return {
+            books,
+            addBookToLibrary,
+            removeBookFromLibrary
+        }
+    }
+)();
+
 
 function createDiv(...classList){
     const div = document.createElement('div');
@@ -159,14 +168,14 @@ function createCard(book){
 
 function onCardUpdate(event) {
     const bookID = event.currentTarget.dataset.bookId;
-    const book = myLibrary.find(el => (el.id === bookID));
+    const book = library.books.find(el => (el.id === bookID));
 
     if (!book) return;
 
     switch (event.target.dataset.action) {
         case "delete":
             if (confirm(`Are you sure you want to delete "${book.title}"`)) {
-                removeBookFromLibrary(bookID);
+                library.removeBookFromLibrary(bookID);
                 renderLibrary();
             }
             break;
@@ -180,7 +189,7 @@ function onCardUpdate(event) {
 function renderLibrary(){
     bookShelf.innerHTML = '';
 
-    for(let book of myLibrary){
+    for(let book of library.books){
         const cardUI = createCard(book);
         if(cardUI) bookShelf.prepend(cardUI);
     }
@@ -206,7 +215,7 @@ function submitForm(event){
 
     closeModal();
     
-    addBookToLibrary(title, author, imgSrc, tags, false);
+    library.addBookToLibrary(title, author, imgSrc, tags, false);
     
     renderLibrary();
 }
@@ -227,9 +236,9 @@ addBookForm.addEventListener('submit', submitForm)
 // Default
 
 
-addBookToLibrary("DSA Made Easy", "Narasimha Karumanchi", "https://m.media-amazon.com/images/I/714+tgyHDRL._SY385_.jpg", ["DSA", "Algorithms", "Data structures", "Programming"], false);
-addBookToLibrary("Atomic Habits", "James Clear", "https://m.media-amazon.com/images/I/51b4CfdTSDL._SY445_SX342_FMwebp_.jpg", ["Habits", "Self-help"], false);
-addBookToLibrary("So Good They Can't Ignore You", "Cal Newport", "https://m.media-amazon.com/images/I/71KLTWMGdrL._SY466_.jpg", ["Work", "Self-help", "Value", "Career"], false);
+library.addBookToLibrary("DSA Made Easy", "Narasimha Karumanchi", "https://m.media-amazon.com/images/I/714+tgyHDRL._SY385_.jpg", ["DSA", "Algorithms", "Data structures", "Programming"], false);
+library.addBookToLibrary("Atomic Habits", "James Clear", "https://m.media-amazon.com/images/I/51b4CfdTSDL._SY445_SX342_FMwebp_.jpg", ["Habits", "Self-help"], false);
+library.addBookToLibrary("So Good They Can't Ignore You", "Cal Newport", "https://m.media-amazon.com/images/I/71KLTWMGdrL._SY466_.jpg", ["Work", "Self-help", "Value", "Career"], false);
 
 
 renderLibrary();
