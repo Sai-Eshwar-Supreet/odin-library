@@ -201,12 +201,74 @@ const modal = document.querySelector('#entry-modal')
 const openEntryModal = document.querySelector('#open-entry');
 const closeEntryModal = document.querySelector('#close-entry');
 
+// Form Validation
+
+const titleInput = addBookForm.querySelector('#book-title');
+const authorInput = addBookForm.querySelector('#book-author');
+const thumbnailInput = addBookForm.querySelector('#book-thumbnail');
+const tagsInput = addBookForm.querySelector('#book-tags');
+
+const tagRegExp = new RegExp(/^([0-9a-zA-Z\s]+(,\s*)?)*$/);
+
+const inputConstraintList = {};
+
+function createCustomMessage(name, input, {customError="", patternMismatch = "", valueMissing = "", rangeUnderflow = "", rangeOverflow = "", stepMismatch = "", tooLong = "", tooShort = "", typeMismatch = ""}){
+    return {
+        [name] : {
+            input,
+            customError,
+            patternMismatch,
+            valueMissing,
+            rangeUnderflow,
+            rangeOverflow,
+            stepMismatch,
+            tooLong,
+            tooShort,
+            typeMismatch
+        }
+    }
+}
+
+Object.assign(inputConstraintList, createCustomMessage("title", titleInput, {valueMissing: "Please enter the book title.", patternMismatch: "Please enter a valid title."}));
+Object.assign(inputConstraintList, createCustomMessage("author", authorInput, {valueMissing: "Please enter the book author."}));
+Object.assign(inputConstraintList, createCustomMessage("thumbnail", thumbnailInput, {typeMismatch: "Please enter a valid URL."}));
+Object.assign(inputConstraintList, createCustomMessage("tags", tagsInput, {customError: "Please enter valid tags. Only comma separated alphanumeric characters are allowed."}));
+
 function openModal(){
     modal.showModal();
 }
 
+function validateInput(name, customError = false){
+    const inputConstraint = inputConstraintList[name];
+    if(!inputConstraint) return;
+    
+    const input = inputConstraint.input;
+
+    input.setCustomValidity(customError ? "Custom Error" : "");
+
+    if(input.validity.valid){
+        return true;
+    }
+
+    for(let error in input.validity){
+        if(input.validity[error]){
+            input.setCustomValidity(inputConstraint[error]);
+            input.reportValidity();
+            return false;
+        }
+    }
+
+    return true;
+}
+
 function submitForm(event){
     event.preventDefault();
+
+    tagsInput.setCustomValidity("");
+
+    const isValid = validateInput("title") && validateInput("author") && validateInput("thumbnail") && validateInput("tags", !tagRegExp.test(tagsInput.value));
+    if(!isValid) return;
+    
     const formData = new FormData(event.target);
     const title = formData.get("title");
     const author = formData.get("author");
@@ -225,13 +287,10 @@ function closeModal() {
     addBookForm.reset();
 }
 
-openEntryModal.addEventListener('click', openModal)
-closeEntryModal.addEventListener('click', closeModal)
+openEntryModal.addEventListener('click', openModal);
+closeEntryModal.addEventListener('click', closeModal);
 
-addBookForm.addEventListener('submit', submitForm)
-
-
-
+addBookForm.addEventListener('submit', submitForm);
 
 // Default
 

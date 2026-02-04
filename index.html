@@ -25,16 +25,16 @@
         <p>© 2026 The Odin Library</p>
     </footer>
     <dialog id="entry-modal">
-        <form id="add-book" action="" method="post">
+        <form id="add-book" action="" method="post" novalidate>
             <legend>ADD AN ENTRY</legend>
             <label for="book-title">Title:</label>
-            <input id="book-title" name="title" type="text" placeholder="The Lottery..." required>
+            <input id="book-title" name="title" type="text" placeholder="The Lottery..." required pattern="^([0-9a-zA-Z\s]+(, )?)*$">
             <label for="book-author">Author:</label>
             <input id="book-author" name="author" type="text" placeholder="Shirley Jackson..." required>
             <label for="book-thumbnail">Thumbnail:</label>
             <input id="book-thumbnail" name="thumbnail" type="url" placeholder="https://thumbnail-path.com">
             <label for="book-tags">Tags:</label>
-            <textarea id="book-tags" name="tags" placeholder="Comma separated tags...."></textarea>
+            <textarea id="book-tags" name="tags" placeholder="Comma separated tags...." pattern="^([0-9a-zA-Z\s]+(, )?)*$"></textarea>
             <button type="button" id="close-entry">Close</button>
             <button type="submit">Submit</button>
         </form>
